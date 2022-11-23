@@ -108,6 +108,9 @@ func UnifiedOrder2(clt *core.Client, req *UnifiedOrderRequest) (resp *UnifiedOrd
 	if req.SceneInfo != "" {
 		m1["scene_info"] = req.SceneInfo
 	}
+	if clt.SubMchId() != "" {
+		m1["sub_mch_id"] = clt.SubMchId()
+	}
 
 	m2, err := UnifiedOrder(clt, m1)
 	if err != nil {

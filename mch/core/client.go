@@ -49,14 +49,16 @@ func (clt *Client) SubMchId() string {
 //  appId:      必选; 公众号的 appid
 //  mchId:      必选; 商户号 mch_id
 //  apiKey:     必选; 商户的签名 key
+//  subMchId:   可选; 子商户号
 //  httpClient: 可选; 默认使用 util.DefaultHttpClient
-func NewClient(appId, mchId, apiKey string, httpClient *http.Client) *Client {
+func NewClient(appId, mchId, apiKey, subMchId string, httpClient *http.Client) *Client {
 	if httpClient == nil {
 		httpClient = wechatutil.DefaultHttpClient
 	}
 	return &Client{
 		appId:      appId,
 		mchId:      mchId,
+		subMchId:   subMchId,
 		apiKey:     apiKey,
 		httpClient: httpClient,
 	}
