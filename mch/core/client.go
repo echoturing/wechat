@@ -25,6 +25,8 @@ type Client struct {
 	subAppId string
 	subMchId string
 
+	apiBaseURL string
+
 	httpClient *http.Client
 }
 
@@ -44,14 +46,21 @@ func (clt *Client) SubAppId() string {
 func (clt *Client) SubMchId() string {
 	return clt.subMchId
 }
+func (clt *Client) APIBaseURL() string {
+	if clt.apiBaseURL == "" {
+		return APIBaseURL()
+	}
+	return clt.apiBaseURL
+}
 
 // NewClient 创建一个新的 Client.
 //  appId:      必选; 公众号的 appid
 //  mchId:      必选; 商户号 mch_id
 //  apiKey:     必选; 商户的签名 key
 //  subMchId:   可选; 子商户号
+//  apiBaseURL: 可选; 默认为https://api.mch.weixin.qq.com，微收银的可能需要传入其他的
 //  httpClient: 可选; 默认使用 util.DefaultHttpClient
-func NewClient(appId, mchId, apiKey, subMchId string, httpClient *http.Client) *Client {
+func NewClient(appId, mchId, apiKey, subMchId string, apiBaseURL string, httpClient *http.Client) *Client {
 	if httpClient == nil {
 		httpClient = wechatutil.DefaultHttpClient
 	}
