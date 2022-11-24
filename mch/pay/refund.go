@@ -84,6 +84,9 @@ func Refund2(clt *core.Client, req *RefundRequest) (resp *RefundResponse, err er
 	if req.RefundAccount != "" {
 		m1["refund_account"] = req.RefundAccount
 	}
+	if clt.SubMchId() != "" {
+		m1["sub_mch_id"] = clt.SubMchId()
+	}
 
 	m2, err := Refund(clt, m1)
 	if err != nil {

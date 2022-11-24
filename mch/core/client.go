@@ -70,6 +70,7 @@ func NewClient(appId, mchId, apiKey, subMchId string, apiBaseURL string, httpCli
 		subMchId:   subMchId,
 		apiKey:     apiKey,
 		httpClient: httpClient,
+		apiBaseURL: apiBaseURL,
 	}
 }
 
