@@ -11,7 +11,7 @@ import (
 // Refund 申请退款.
 //  NOTE: 请求需要双向证书.
 func Refund(clt *core.Client, req map[string]string) (resp map[string]string, err error) {
-	return clt.PostXML(core.APIBaseURL()+"/secapi/pay/refund", req)
+	return clt.PostXML(clt.APIBaseURL()+"/secapi/pay/refund", req)
 }
 
 type RefundRequest struct {
@@ -83,6 +83,9 @@ func Refund2(clt *core.Client, req *RefundRequest) (resp *RefundResponse, err er
 	}
 	if req.RefundAccount != "" {
 		m1["refund_account"] = req.RefundAccount
+	}
+	if clt.SubMchId() != "" {
+		m1["sub_mch_id"] = clt.SubMchId()
 	}
 
 	m2, err := Refund(clt, m1)

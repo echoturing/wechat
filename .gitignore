@@ -27,3 +27,5 @@ Thumbs.db
 # IntelliJ IDEA
 .idea/
 *.iml
+
+o_test.go
