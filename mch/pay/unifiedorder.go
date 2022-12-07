@@ -39,7 +39,8 @@ type UnifiedOrderRequest struct {
 	LimitPay   string    `xml:"limit_pay"`   // no_credit--指定不能使用信用卡支付
 	OpenId     string    `xml:"openid"`      // rade_type=JSAPI，此参数必传，用户在商户appid下的唯一标识。
 	SubOpenId  string    `xml:"sub_openid"`  // trade_type=JSAPI，此参数必传，用户在子商户appid下的唯一标识。openid和sub_openid可以选传其中之一，如果选择传sub_openid,则必须传sub_appid。
-	SceneInfo  string    `xml:"scene_info"`  // 该字段用于上报支付的场景信息,针对H5支付有以下三种场景,请根据对应场景上报,H5支付不建议在APP端使用，针对场景1，2请接入APP支付，不然可能会出现兼容性问题
+	SubAppId   string    `xml:"sub_appid"`
+	SceneInfo  string    `xml:"scene_info"` // 该字段用于上报支付的场景信息,针对H5支付有以下三种场景,请根据对应场景上报,H5支付不建议在APP端使用，针对场景1，2请接入APP支付，不然可能会出现兼容性问题
 }
 
 type UnifiedOrderResponse struct {
@@ -53,6 +54,7 @@ type UnifiedOrderResponse struct {
 	DeviceInfo string `xml:"device_info"` // 调用接口提交的终端设备号。
 	CodeURL    string `xml:"code_url"`    // trade_type 为 NATIVE 时有返回，可将该参数值生成二维码展示出来进行扫码支付
 	MWebURL    string `xml:"mweb_url"`    // trade_type 为 MWEB 时有返回
+	RawMap     map[string]string
 }
 
 // UnifiedOrder2 统一下单.
@@ -108,6 +110,9 @@ func UnifiedOrder2(clt *core.Client, req *UnifiedOrderRequest) (resp *UnifiedOrd
 	if req.SceneInfo != "" {
 		m1["scene_info"] = req.SceneInfo
 	}
+	if req.SubAppId != "" {
+		m1["sub_appid"] = req.SubAppId
+	}
 	if clt.SubMchId() != "" {
 		m1["sub_mch_id"] = clt.SubMchId()
 	}
@@ -116,7 +121,6 @@ func UnifiedOrder2(clt *core.Client, req *UnifiedOrderRequest) (resp *UnifiedOrd
 	if err != nil {
 		return nil, err
 	}
-
 	// 校验 trade_type
 	respTradeType := m2["trade_type"]
 	if respTradeType != req.TradeType {
@@ -130,6 +134,7 @@ func UnifiedOrder2(clt *core.Client, req *UnifiedOrderRequest) (resp *UnifiedOrd
 		DeviceInfo: m2["device_info"],
 		CodeURL:    m2["code_url"],
 		MWebURL:    m2["mweb_url"],
+		RawMap:     m2,
 	}
 	return resp, nil
 }
